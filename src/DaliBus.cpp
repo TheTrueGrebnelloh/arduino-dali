@@ -109,6 +109,16 @@ daliReturnValue DaliBusClass::sendRaw(const byte * message, uint8_t bits) {
   return DALI_SENT;
 }
 
+daliReturnValue DaliBusClass::pullLow(uint32_t time_us) {
+  if (busState != IDLE) 
+    return DALI_BUSY;
+
+  setBusLevel(LOW);
+  delayMicroseconds(time_us);
+  setBusLevel(HIGH);
+  return DALI_NO_ERROR;
+}
+
 bool DaliBusClass::busIsIdle() {
   return (busState == IDLE);
 }

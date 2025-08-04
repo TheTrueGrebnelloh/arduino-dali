@@ -66,7 +66,7 @@ const unsigned long DALI_TE_MAX = (120 * DALI_TE) / 100;                 // 500u
 #elif defined(ARDUINO_ARCH_ESP32)
   #define getBusLevel (activeLow ? !(DaliBus.fastRead(rxPin)) : DaliBus.fastRead(rxPin))
   #define setBusLevel(level) DaliBus.fastWrite(txPin, (activeLow ? !level : level)); txBusLevel = level;
-#elif defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_STM32)
+#elif defined(ARDUINO_ARCH_AVR)
   #define getBusLevel (activeLow ? !digitalRead(rxPin) : digitalRead(rxPin))
   #define setBusLevel(level) digitalWrite(txPin, (activeLow ? !level : level)); txBusLevel = level;
 #else
@@ -98,6 +98,7 @@ class DaliBusClass {
   public:
     void begin(byte tx_pin, byte rx_pin, bool active_low = true);
     daliReturnValue sendRaw(const byte * message, uint8_t bits);
+    daliReturnValue pullLow(uint32_t time_us);
 
     int getLastResponse();
 
