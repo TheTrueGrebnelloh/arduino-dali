@@ -112,10 +112,7 @@ daliReturnValue DaliBusClass::sendRaw(const byte * message, uint8_t bits) {
 daliReturnValue DaliBusClass::pullLow(uint32_t time_us) {
   if (busState != IDLE) 
     return DALI_BUSY;
-
-  setBusLevel(LOW);
-  delayMicroseconds(time_us);
-  setBusLevel(HIGH);
+  busState = COMPARE_LOW_WAIT;
   return DALI_NO_ERROR;
 }
 
@@ -149,7 +146,7 @@ void DaliBusClass::timerISR() {
   if (busIdleCount < 0xff) // increment idle counter avoiding overflow
     busIdleCount++;
 
-  if (busIdleCount == 4 && getBusLevel == LOW) { // bus is low idle for more than 2 TE, something's pulling down for too long
+  if (busState != COMPARE_LOW && busIdleCount == 4 && getBusLevel == LOW) { // bus is low idle for more than 2 TE, something's pulling down for too long
     busState = SHORT;
     setBusLevel(HIGH);
     if(errorCallback != 0)
@@ -260,6 +257,23 @@ void DaliBusClass::timerISR() {
         }
       }
       break;
+    case COMPARE_LOW_WAIT:
+      if (busIdleCount >= 7)
+      {
+        setBusLevel(LOW);
+        busState = COMPARE_LOW;
+        busIdleCount = 0;
+      }
+      break;
+    case COMPARE_LOW:
+      if (busIdleCount >= 18) // about 7.5ms of Low time
+      {
+        setBusLevel(HIGH);
+        busIdleCount = 0;
+        busState = IDLE;
+      }
+      break;
+
   }
 }
 

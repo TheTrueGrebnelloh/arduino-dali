@@ -103,7 +103,12 @@ daliReturnValue DaliClass::sendCompareResponse(byte timeout) {
   unsigned long time = millis();
   while (!DaliBus.busIsIdle())
     if (millis() - time > timeout) return DALI_READY_TIMEOUT;
-  return DaliBus.pullLow(7000);
+
+  daliReturnValue ret = DaliBus.pullLow(2000);
+
+  while (!DaliBus.busIsIdle())
+    if (millis() - time > timeout) return DALI_READY_TIMEOUT;
+  return ret;
 }
 
 daliReturnValue DaliClass::sendCmd(byte address, DaliCmd command, byte addr_type) {

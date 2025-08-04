@@ -141,7 +141,8 @@ class DaliBusClass {
       TX_STOP_1ST, TX_STOP,
       IDLE,
       SHORT,
-      WAIT_RX, RX_START, RX_BIT, RX_STOP
+      WAIT_RX, RX_START, RX_BIT, RX_STOP,
+      COMPARE_LOW_WAIT, COMPARE_LOW,
     };
     volatile busStateEnum busState;
     volatile byte txPos;
