@@ -41,7 +41,7 @@
 #ifndef DALI_H
 #define DALI_H
 
-#include <arduino.h>
+#include <Arduino.h>
 #include "DaliBus.h"
 #include "DaliCommands.h"
 
@@ -96,6 +96,16 @@ class DaliClass {
       * this method doesn't do by itself. */
     daliReturnValue sendCmd(byte address, DaliCmd command, byte addr_type = DaliAddressTypes::SHORT);
     daliReturnValue sendCmdBroadcast(DaliCmd command);
+
+    /** Send response
+     * The response send by a DALI slave device. Always only one byte long.
+     */
+    daliReturnValue sendResponse(byte data);
+
+    /**
+     * special answer for the COMPARE command. pulls the bus low for some time to notify the master.
+     */
+    daliReturnValue sendCompareResponse(byte timeout);
 
     /** Send a DALI command, wait for its completion and return the response if available
       * @param  address    destination address

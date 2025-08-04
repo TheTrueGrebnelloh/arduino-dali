@@ -93,6 +93,19 @@ daliReturnValue DaliClass::sendCmdBroadcast(DaliCmd command) {
   return sendCmd(0xFF, command, 1);
 }
 
+daliReturnValue DaliClass::sendResponse(byte data) {
+  byte message[1];
+  message[0] = data;
+  return (daliReturnValue)sendRawWait(message, 8);
+}
+
+daliReturnValue DaliClass::sendCompareResponse(byte timeout) {
+  unsigned long time = millis();
+  while (!DaliBus.busIsIdle())
+    if (millis() - time > timeout) return DALI_READY_TIMEOUT;
+  return DaliBus.pullLow(7000);
+}
+
 daliReturnValue DaliClass::sendCmd(byte address, DaliCmd command, byte addr_type) {
   byte message[2];
   return DaliBus.sendRaw(prepareCmd(message, address, command, addr_type, 1), 16);
