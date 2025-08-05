@@ -47,14 +47,13 @@ void DaliClass::setActivityCallback(EventHandlerActivityFuncPtr callback)
   DaliBus.activityCallback = callback;
 }
 
-int DaliClass::sendRawWait(const byte * message, uint8_t bits, byte timeout) {
+int DaliClass::sendRawWait(const byte * message, uint8_t bits, bool isResponse, byte timeout) {
   unsigned long time = millis();
   int result;
-
   while (!DaliBus.busIsIdle())
     if (millis() - time > timeout) return DALI_READY_TIMEOUT;
 
-  result = DaliBus.sendRaw(message, bits);
+  result = DaliBus.sendRaw(message, bits, isResponse);
 
   while (!DaliBus.busIsIdle())
     if (millis() - time > timeout) return DALI_READY_TIMEOUT;
@@ -96,7 +95,7 @@ daliReturnValue DaliClass::sendCmdBroadcast(DaliCmd command) {
 daliReturnValue DaliClass::sendResponse(byte data) {
   byte message[1];
   message[0] = data;
-  return (daliReturnValue)sendRawWait(message, 8);
+  return (daliReturnValue)sendRawWait(message, 8, true);
 }
 
 daliReturnValue DaliClass::sendCompareResponse(byte timeout) {

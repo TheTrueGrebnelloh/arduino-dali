@@ -97,7 +97,7 @@ typedef void (*EventHandlerErrorFuncPtr)(daliReturnValue errorCode);
 class DaliBusClass {
   public:
     void begin(byte tx_pin, byte rx_pin, bool active_low = true);
-    daliReturnValue sendRaw(const byte * message, uint8_t bits);
+    daliReturnValue sendRaw(const byte * message, uint8_t bits, bool isResponse = false);
     daliReturnValue pullLow(uint32_t time_us);
 
     int getLastResponse();
@@ -134,6 +134,7 @@ class DaliBusClass {
     bool activeLow;
     byte txMessage[4];
     uint8_t txLength;
+    bool txIsResponse;
 
     enum busStateEnum {
       TX_START_1ST, TX_START_2ND,

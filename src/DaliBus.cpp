@@ -83,7 +83,7 @@ void DaliBusClass::begin(byte tx_pin, byte rx_pin, bool active_low) {
   #endif
 }
 
-daliReturnValue DaliBusClass::sendRaw(const byte * message, uint8_t bits) {
+daliReturnValue DaliBusClass::sendRaw(const byte * message, uint8_t bits, bool isResponse) {
   if(bits > 25) return DALI_INVALID_PARAMETER;
   if(bits != 25 && bits % 8 != 0) return DALI_INVALID_PARAMETER;
   uint8_t length = (bits - (bits % 8)) / 8;
@@ -100,6 +100,7 @@ daliReturnValue DaliBusClass::sendRaw(const byte * message, uint8_t bits) {
   }
 
   txLength = bits;
+  txIsResponse = isResponse;
   txCollision = 0;
   rxMessage = DALI_RX_EMPTY;
   rxLength = 0;
@@ -156,7 +157,7 @@ void DaliBusClass::timerISR() {
   // timer state machine
   switch (busState) {
     case TX_START_1ST: // initiate transmission by setting bus low (1st half)
-      if (busIdleCount >= 26) { // wait at least 9.17ms (22 TE) settling time before sending (little more for TCI compatibility)
+      if (busIdleCount >= 26 || txIsResponse && busIdleCount >= 8) { // wait at least 9.17ms (22 TE) settling time before sending (little more for TCI compatibility); when sending response for forward frame only wait 7TE 
         setBusLevel(LOW);
         busState = TX_START_2ND;
       }
