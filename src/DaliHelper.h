@@ -78,4 +78,57 @@ class DaliHelper
             }
         }
 
+        static float fadeRateFromnumber(uint8_t number) {
+            switch (number)
+            {
+            case 1:
+                return 358;
+                break;
+            case 2:
+                return 253;
+                break;
+            case 3:
+                return 179;
+                break;
+            case 4:
+                return 127;
+                break;
+            case 5:
+                return 89.4;
+                break;
+            case 6:
+                return 63.3;
+                break;
+            case 7:
+                return 44.7;
+                break;
+            case 8:
+                return 31.6;
+                break;
+            case 9:
+                return 22.4;
+                break;
+            case 10:
+                return 15.8;
+                break;
+            case 11:
+                return 11.2;
+                break;
+            case 12:
+                return 7.9;
+                break;
+            case 13:
+                return 5.6;
+                break;
+            case 14:
+                return 4;
+                break;
+            case 15:
+                return 2.8;
+                break;
+            default:
+                return 250;
+                break;
+            }
+        }
 };
