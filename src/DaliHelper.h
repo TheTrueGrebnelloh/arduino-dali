@@ -27,54 +27,53 @@ class DaliHelper
         static uint32_t fadeTimeFromNumber(uint8_t number) {
             switch (number)
             {
-            case 0:
+            case 1:
                 return 700;
                 break;
-            case 1:
+            case 2:
                 return 1000;
                 break;
-            case 2:
+            case 3:
                 return 1400;
                 break;
-            case 3:
+            case 4:
                 return 2000;
                 break;
-            case 4:
+            case 5:
                 return 2800;
                 break;
-            case 5:
+            case 6:
                 return 4000;
                 break;
-            case 6:
+            case 7:
                 return 5700;
                 break;
-            case 7:
+            case 8:
                 return 8000;
                 break;
-            case 8:
+            case 9:
                 return 11300;
                 break;
-            case 9:
+            case 10:
                 return 16000;
                 break;
-            case 10:
+            case 11:
                 return 22600;
                 break;
-            case 11:
+            case 12:
                 return 32000;
                 break;
-            case 12:
+            case 13:
                 return 45300;
                 break;
-            case 13:
+            case 14:
                 return 64000;
                 break;
-            case 14:
+            case 15:
                 return 90500;
                 break;
             default:
-                Serial.printf("Got unknown fade time number %u\n", number);
-                return 100;
+                return 250;
                 break;
             }
         }
