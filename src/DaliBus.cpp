@@ -157,7 +157,7 @@ void DaliBusClass::timerISR() {
   // timer state machine
   switch (busState) {
     case TX_START_1ST: // initiate transmission by setting bus low (1st half)
-      if (busIdleCount >= 26 || txIsResponse && busIdleCount >= 7) { // wait at least 9.17ms (22 TE) settling time before sending (little more for TCI compatibility); when sending response for forward frame only wait 7TE 
+      if (busIdleCount >= 26 || txIsResponse && busIdleCount >= 10) { // wait at least 9.17ms (22 TE) settling time before sending (little more for TCI compatibility); when sending response for forward frame only wait 7TE 
         setBusLevel(LOW);
         busState = TX_START_2ND;
       }
@@ -259,7 +259,7 @@ void DaliBusClass::timerISR() {
       }
       break;
     case COMPARE_LOW_WAIT:
-      if (busIdleCount >= 7)
+      if (busIdleCount >= 10)
       {
         setBusLevel(LOW);
         busState = COMPARE_LOW;
